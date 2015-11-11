@@ -9,6 +9,7 @@
 	<capitulo numero="2" titulo="Usos práticos para XML">
 		<axml:call
 			service="http://localhost:8080/axis2/services/StockQuoteService/getPrice?symbol=Lenovo">
+			teste
 		</axml:call>
 	</capitulo>
 </livro>
