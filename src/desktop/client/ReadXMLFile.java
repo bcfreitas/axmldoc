@@ -64,7 +64,6 @@ public class ReadXMLFile {
 				Node node;
 				Node remoteCall;
 				NodeList remoteCallList;
-				AxmlDoc axmlDoc = new AxmlDoc(fXmlFile, fXmlFile);
 
 				// read a string value
 				// System.out.println(xPath.compile(pathExpression).evaluate(doc));
@@ -72,30 +71,30 @@ public class ReadXMLFile {
 				// Usuário escolhe o capítulo 1 para leitura:
 				pathExpression = xPath.compile("/livro/capitulo[1]");
 				node = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
+				AxmlDoc axmlNode = new AxmlDoc((Element)node, fXmlFile, fXmlFile );
 				System.out.println("");
 				System.out.println("---> Usuário escolhe o capítulo 1 para leitura:");
-				System.out.println(node.getTextContent());
+				System.out.println(axmlNode.getTextContent());
 				System.out.println("");
 
 				// Usuário escolhe o capítulo 2 para leitura:
 				pathExpression = xPath.compile("/livro/capitulo[2]");
 				node = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
+				axmlNode = new AxmlDoc((Element)node, fXmlFile, fXmlFile );
 				System.out.println("");
 				System.out.println("---> Usuário escolhe o capítulo 2 para leitura:");
-
-				pathExpression = xPath.compile("/livro/capitulo[2]/*[name()='axml:call']");
-				remoteCallList = (NodeList) pathExpression.evaluate(doc, XPathConstants.NODESET);
-				if (remoteCallList != null && remoteCallList.getLength() == 0) {
-					System.out.println(node.getTextContent());
-				} else {
-					for (int remoteCallCount = 1; remoteCallCount <= remoteCallList.getLength(); remoteCallCount++) {
-						pathExpression = xPath.compile("/livro/capitulo[2]/axml:call["
-								+ remoteCallCount + "]");
-						remoteCall = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
-						System.out.println(axmlDoc.materializarElemento(node, ReturnType.STRING).getTextContent());
-					}
-
-				}
+				System.out.println(axmlNode.getTextContent());
+//				if (remoteCallList != null && remoteCallList.getLength() == 0) {
+//					System.out.println(node.getTextContent());
+//				} else {
+//					for (int remoteCallCount = 1; remoteCallCount <= remoteCallList.getLength(); remoteCallCount++) {
+//						pathExpression = xPath.compile("/livro/capitulo[2]/axml:call["
+//								+ remoteCallCount + "]");
+//						remoteCall = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
+//						System.out.println(axmlDoc.materializarElemento(node, ReturnType.STRING).getTextContent());
+//					}
+//
+//				}
 				System.out.println("");
 			}
 		} catch (Exception e) {
