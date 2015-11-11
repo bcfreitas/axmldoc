@@ -77,17 +77,16 @@ public class AxmlDoc {
 			//NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
 			
 			//Busca todas os nos com chamadas a serviço remoto
-			NodeList chamadasRemotas = this.getXml().getElementsByTagName("axml:call");
-			System.out.println("tamanho: " + chamadasRemotas.getLength());
+			NodeList remoteCalls = this.getXml().getElementsByTagName("axml:call");
 			
-			List<Node> nosComCR = new ArrayList<Node>();
-			for(int n = chamadasRemotas.getLength(); n>0; n-- ){
-				System.out.println("aaa " + chamadasRemotas.item(n-1).getParentNode());
-				Node noPai = chamadasRemotas.item(n-1).getParentNode();
-				nosComCR.add(noPai);
+			List<Node> remoteCallsParents = new ArrayList<Node>();
+			for(int n = remoteCalls.getLength(); n>0; n-- ){
+				System.out.println("aaa " + remoteCalls.item(n-1).getParentNode());
+				Node noPai = remoteCalls.item(n-1).getParentNode();
+				remoteCallsParents.add(noPai);
 			}
 			
-			return nosComCR;
+			return remoteCallsParents;
 
 		}
 
@@ -110,7 +109,7 @@ public class AxmlDoc {
 			Document retornoXML = dBuilder.parse(content);
 			
 			//retorna objeto Node com dados obtidos
-			no.setNodeValue(retornoXML.getDocumentElement().getNodeValue());
+			no.setTextContent(retornoXML.getDocumentElement().getFirstChild().getTextContent());
 			return no;
 		}
 }

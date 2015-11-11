@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<livro titulo="Introducao XML" autor="Joao de Deus">
+	<capitulo numero="1" titulo="Estrutura de um arquivo XML">
+		Texto do capitulo 1 --- Texto do
+		capitulo 1 --- Texto do capitulo 1 --- Texto do capitulo 1 --- Texto
+		do capitulo 1 --- Texto do capitulo 1 --- Texto do capitulo 1 ---
+		Texto do capitulo 1
+	</capitulo>
+	<capitulo numero="2" titulo="Usos práticos para XML">
+		<axml:call
+			service="http://localhost:8080/axis2/services/StockQuoteService/getPrice?symbol=Lenovo">
+		</axml:call>
+	</capitulo>
+</livro>
