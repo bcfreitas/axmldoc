@@ -55,7 +55,7 @@ public class AxmlNode extends AbstractAxmlNode {
 					//TODO - parametrizar/arrumar
 				    Document document = this.decoratedNode.getOwnerDocument();
 				    Node materializedNode = materializeNode(remoteCall, ReturnType.STRING);
-				    this.decoratedNode.replaceChild(remoteCall, materializedNode);
+				    //this.decoratedNode.replaceChild(remoteCall, materializedNode);
 				    
 					
 
@@ -104,6 +104,13 @@ public class AxmlNode extends AbstractAxmlNode {
 
 	public Node materializeNode(Node no, ReturnType returnType) throws IOException, SAXException,
 			ParserConfigurationException {
+		//pegando o Node filho do tipo Texto
+		Node textNode = no.getFirstChild();
+		
+		//pegando o no pai do no a ser materializado
+		Node parentNode = no.getParentNode();
+		
+		
 		Element chamadaRemota = (Element) no;
 		// captura endereço do webservice
 		URL enderecoRemoto = new URL(chamadaRemota.getAttribute("service"));
@@ -111,21 +118,23 @@ public class AxmlNode extends AbstractAxmlNode {
 		// estabelece conexao
 		HttpURLConnection conexao = (HttpURLConnection) enderecoRemoto.openConnection();
 
-		// recebe dados
-		InputStream content = conexao.getInputStream();
-
-		// cria documento XML com dados recebidos
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document retornoXML = dBuilder.parse(content);
+//		// recebe dados
+//		InputStream content = conexao.getInputStream();
+//
+//		// cria documento XML com dados recebidos
+//		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//		Document retornoXML = dBuilder.parse(content);
 
 		// retorna objeto Node com dados obtidos
 		if (returnType.equals(ReturnType.STRING)) {
-			Document document = no.getOwnerDocument();
-			document.replaceChild(new NodeImpl(), no);
-			no.setTextContent(retornoXML.getDocumentElement().getFirstChild().getTextContent());
+//			textNode.setTextContent(retornoXML.getDocumentElement().getFirstChild().getTextContent());
+			textNode.setTextContent("funfou");
+			parentNode.removeChild(no);
+			parentNode.appendChild(textNode);
+		
 		} else if (returnType.equals(ReturnType.XMLTREE)) {
-			no.appendChild(retornoXML.getDocumentElement());
+//			no.appendChild(retornoXML.getDocumentElement());
 		}
 
 		return no;
