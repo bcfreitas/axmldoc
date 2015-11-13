@@ -1,7 +1,6 @@
 package desktop.client;
 
 import java.io.File;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,7 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import axmlDoc.AxmlDoc;
-import axmlDoc.AxmlDoc.ReturnType;
+import axmlDoc.AxmlNode;
 
 public class ReadXMLFile {
 
@@ -28,10 +27,11 @@ public class ReadXMLFile {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
+			AxmlDoc axmlDoc = new AxmlDoc(doc);
 
-			doc.getDocumentElement().normalize();
+			axmlDoc.getDocumentElement().normalize();
 
-			NodeList nList = doc.getElementsByTagName("livro");
+			NodeList nList = axmlDoc.getElementsByTagName("livro");
 
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 
@@ -70,8 +70,8 @@ public class ReadXMLFile {
 
 				// Usuário escolhe o capítulo 1 para leitura:
 				pathExpression = xPath.compile("/livro/capitulo[1]");
-				node = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
-				AxmlDoc axmlNode = new AxmlDoc((Element)node, fXmlFile, fXmlFile );
+				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
+				AxmlNode axmlNode = new AxmlNode((Element) node);
 				System.out.println("");
 				System.out.println("---> Usuário escolhe o capítulo 1 para leitura:");
 				System.out.println(axmlNode.getTextContent());
@@ -79,22 +79,27 @@ public class ReadXMLFile {
 
 				// Usuário escolhe o capítulo 2 para leitura:
 				pathExpression = xPath.compile("/livro/capitulo[2]");
-				node = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
-				axmlNode = new AxmlDoc((Element)node, fXmlFile, fXmlFile );
+				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
+				axmlNode = new AxmlNode(node);
 				System.out.println("");
 				System.out.println("---> Usuário escolhe o capítulo 2 para leitura:");
 				System.out.println(axmlNode.getTextContent());
-//				if (remoteCallList != null && remoteCallList.getLength() == 0) {
-//					System.out.println(node.getTextContent());
-//				} else {
-//					for (int remoteCallCount = 1; remoteCallCount <= remoteCallList.getLength(); remoteCallCount++) {
-//						pathExpression = xPath.compile("/livro/capitulo[2]/axml:call["
-//								+ remoteCallCount + "]");
-//						remoteCall = (Node) pathExpression.evaluate(doc, XPathConstants.NODE);
-//						System.out.println(axmlDoc.materializarElemento(node, ReturnType.STRING).getTextContent());
-//					}
-//
-//				}
+				// if (remoteCallList != null && remoteCallList.getLength() ==
+				// 0) {
+				// System.out.println(node.getTextContent());
+				// } else {
+				// for (int remoteCallCount = 1; remoteCallCount <=
+				// remoteCallList.getLength(); remoteCallCount++) {
+				// pathExpression =
+				// xPath.compile("/livro/capitulo[2]/axml:call["
+				// + remoteCallCount + "]");
+				// remoteCall = (Node) pathExpression.evaluate(doc,
+				// XPathConstants.NODE);
+				// System.out.println(axmlDoc.materializarElemento(node,
+				// ReturnType.STRING).getTextContent());
+				// }
+				//
+				// }
 				System.out.println("");
 			}
 		} catch (Exception e) {
