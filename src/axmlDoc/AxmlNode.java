@@ -1,13 +1,10 @@
 package axmlDoc;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -22,8 +19,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xerces.internal.impl.xs.opti.NodeImpl;
 
 import axmlDoc.AxmlDoc.ReturnType;
 
@@ -54,7 +49,7 @@ public class AxmlNode extends AbstractAxmlNode {
 					
 					//TODO - parametrizar/arrumar
 				    Document document = this.decoratedNode.getOwnerDocument();
-				    Node materializedNode = materializeNode(remoteCall, ReturnType.STRING);
+				    materializeNode(remoteCall, ReturnType.STRING);
 				    //this.decoratedNode.replaceChild(remoteCall, materializedNode);
 				    
 					
@@ -73,10 +68,12 @@ public class AxmlNode extends AbstractAxmlNode {
 						e.printStackTrace();
 					}
 
+					PrintWriter writer = new PrintWriter("livro2.txt", "ISO-8859-1");
 				    DOMSource source = new DOMSource(document);
-				    StreamResult result = new StreamResult(System.out);
+				    StreamResult result = new StreamResult(writer);
 				    try {
 						transformer.transform(source, result);
+						writer.close();
 					} catch (TransformerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -102,7 +99,7 @@ public class AxmlNode extends AbstractAxmlNode {
 		return retorno;
 	}
 
-	public Node materializeNode(Node no, ReturnType returnType) throws IOException, SAXException,
+	public void materializeNode(Node no, ReturnType returnType) throws IOException, SAXException,
 			ParserConfigurationException {
 		//pegando o Node filho do tipo Texto
 		Node textNode = no.getFirstChild();
@@ -137,7 +134,6 @@ public class AxmlNode extends AbstractAxmlNode {
 //			no.appendChild(retornoXML.getDocumentElement());
 		}
 
-		return no;
 	}
 
 }
