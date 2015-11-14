@@ -1,5 +1,6 @@
 package axmlDoc;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,8 +26,18 @@ public class AxmlDoc extends AbstractAxmlDoc {
 		STRING, XMLTREE
 	};
 
+	public enum HandleStrategy {
+		LAZY,LAZY_PERSIST,LAZY_PERSIST_WITH_EXCLUSION, EAGGER 
+	}
+	
+	public HandleStrategy handleStrategy;
+	
 	public AxmlDoc(Document documentToDecorate) {
 		super(documentToDecorate);
+	}
+	
+	public AxmlDoc(File xmlFile, HandleStrategy handleStrategy){
+		super(xmlFile, handleStrategy);
 	}
 
 	public List<Node> verificarChamadasRemotas() {

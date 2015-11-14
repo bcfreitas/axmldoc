@@ -1,5 +1,7 @@
 package axmlDoc;
 
+import java.io.File;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -18,8 +20,12 @@ import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
 
+import axmlDoc.AxmlDoc.HandleStrategy;
+
 public abstract class AbstractAxmlDoc implements Document {
 	private Document decoratedDocument;
+	private String xmlFilePath;
+	private HandleStrategy handleStrategy;
 
 	public enum ReturnType {
 		STRING, XMLTREE
@@ -27,6 +33,11 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	public AbstractAxmlDoc(Document documentToDecorate) {
 		this.decoratedDocument = documentToDecorate;
+	}
+
+	public AbstractAxmlDoc(File xmlFile, HandleStrategy handleStrategy) {
+		this.xmlFilePath = xmlFile.getPath();
+		this.handleStrategy = handleStrategy;
 	}
 
 	@Override
