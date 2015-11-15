@@ -12,6 +12,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
@@ -22,22 +25,25 @@ import org.xml.sax.SAXException;
 
 public class AxmlDoc extends AbstractAxmlDoc {
 
+	private HandleStrategy handleStrategy;
+	private XPath xPath;
+
 	public enum ReturnType {
 		STRING, XMLTREE
 	};
 
 	public enum HandleStrategy {
-		LAZY,LAZY_PERSIST,LAZY_PERSIST_WITH_EXCLUSION, EAGGER 
+		LAZY, LAZY_PERSIST, LAZY_PERSIST_WITH_EXCLUSION, EAGGER
 	}
-	
-	public HandleStrategy handleStrategy;
-	
+
 	public AxmlDoc(Document documentToDecorate) {
 		super(documentToDecorate);
 	}
-	
-	public AxmlDoc(File xmlFile, HandleStrategy handleStrategy){
-		super(xmlFile, handleStrategy);
+
+	public AxmlDoc(File xmlFile, HandleStrategy handleStrategy, ReturnType returnType) {
+		super(xmlFile, handleStrategy, returnType);
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		this.xPath = xPathFactory.newXPath();
 	}
 
 	public List<Node> verificarChamadasRemotas() {
@@ -94,5 +100,34 @@ public class AxmlDoc extends AbstractAxmlDoc {
 		}
 
 		return no;
+	}
+
+	/**
+	 * getTextFromSingleNode
+	 * 
+	 * Receives a xPath string expression that refers to a unique node element
+	 * from DOM document, and return the string from text child element. If a
+	 * remote call exists, this node will be materialized.
+	 * 
+	 * @param xPathString
+	 *            - String xPath expression
+	 * @return String from text child or from materialized remote call.
+	 * @throws AxmlDocException
+	 */
+	public String getTextFromSingleNode(String xPathString) throws AxmlDocException {
+		AxmlNode axmlNode;
+		Node node;
+		XPathExpression xPathExpression;
+
+		try {
+			xPathExpression = xPath.compile(xPathString);
+			node = (Node) xPathExpression.evaluate(this.decoratedDocument, XPathConstants.NODE);
+			axmlNode = new AxmlNode((Element) node);
+		} catch (XPathExpressionException xpe) {
+			throw new AxmlDocException(
+					"xPath error. Check if your expression is ok and if refer to a only one node element.");
+		}
+
+		return axmlNode.getTextContent();
 	}
 }

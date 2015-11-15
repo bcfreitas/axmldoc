@@ -1,6 +1,11 @@
 package axmlDoc;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -19,25 +24,37 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
+import org.xml.sax.SAXException;
 
 import axmlDoc.AxmlDoc.HandleStrategy;
+import axmlDoc.AxmlDoc.ReturnType;
 
 public abstract class AbstractAxmlDoc implements Document {
-	private Document decoratedDocument;
+	protected Document decoratedDocument;
 	private String xmlFilePath;
 	private HandleStrategy handleStrategy;
-
-	public enum ReturnType {
-		STRING, XMLTREE
-	};
+	private DocumentBuilderFactory dbFactory;
+	private DocumentBuilder dBuilder;
+	protected ReturnType returnType;
+	protected Node uniqueMaterializedElement;
 
 	public AbstractAxmlDoc(Document documentToDecorate) {
 		this.decoratedDocument = documentToDecorate;
 	}
 
-	public AbstractAxmlDoc(File xmlFile, HandleStrategy handleStrategy) {
-		this.xmlFilePath = xmlFile.getPath();
-		this.handleStrategy = handleStrategy;
+	public AbstractAxmlDoc(File xmlFile, HandleStrategy handleStrategy, ReturnType returnType)
+			throws AxmlDocException {
+		try {
+			dbFactory = DocumentBuilderFactory.newInstance();
+			dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(xmlFile);
+			this.decoratedDocument = doc;
+			this.xmlFilePath = xmlFile.getPath();
+			this.handleStrategy = handleStrategy;
+			this.returnType = returnType;
+		} catch (ParserConfigurationException | IOException | SAXException e) {
+			throw new AxmlDocException("Error parsing XML file. It exists and the path is correct?");
+		}
 	}
 
 	@Override
@@ -132,7 +149,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void normalize() {
-		this.decoratedDocument.normalize();	
+		this.decoratedDocument.normalize();
 	}
 
 	@Override
@@ -152,7 +169,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void setPrefix(String prefix) throws DOMException {
-		this.decoratedDocument.setPrefix(prefix);		
+		this.decoratedDocument.setPrefix(prefix);
 	}
 
 	@Override
@@ -176,14 +193,14 @@ public abstract class AbstractAxmlDoc implements Document {
 	}
 
 	@Override
-	//TODO Implementar materialização de nós com intensional data. 
+	// TODO Implementar materialização de nós com intensional data.
 	public String getTextContent() throws DOMException {
 		return this.decoratedDocument.getTextContent();
 	}
 
 	@Override
 	public void setTextContent(String textContent) throws DOMException {
-		this.decoratedDocument.setTextContent(textContent);		
+		this.decoratedDocument.setTextContent(textContent);
 	}
 
 	@Override
@@ -329,7 +346,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void setXmlStandalone(boolean xmlStandalone) throws DOMException {
-		this.decoratedDocument.setXmlStandalone(xmlStandalone);		
+		this.decoratedDocument.setXmlStandalone(xmlStandalone);
 	}
 
 	@Override
@@ -339,7 +356,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void setXmlVersion(String xmlVersion) throws DOMException {
-		this.decoratedDocument.setXmlVersion(xmlVersion);		
+		this.decoratedDocument.setXmlVersion(xmlVersion);
 	}
 
 	@Override
@@ -349,7 +366,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void setStrictErrorChecking(boolean strictErrorChecking) {
-		this.decoratedDocument.setStrictErrorChecking(strictErrorChecking);		
+		this.decoratedDocument.setStrictErrorChecking(strictErrorChecking);
 	}
 
 	@Override
@@ -359,7 +376,7 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void setDocumentURI(String documentURI) {
-		this.decoratedDocument.setDocumentURI(documentURI);		
+		this.decoratedDocument.setDocumentURI(documentURI);
 	}
 
 	@Override
@@ -374,13 +391,12 @@ public abstract class AbstractAxmlDoc implements Document {
 
 	@Override
 	public void normalizeDocument() {
-		this.decoratedDocument.normalizeDocument();		
+		this.decoratedDocument.normalizeDocument();
 	}
 
 	@Override
 	public Node renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
 		return this.decoratedDocument.renameNode(n, namespaceURI, qualifiedName);
 	}
-
 
 }

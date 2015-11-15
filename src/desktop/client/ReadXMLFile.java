@@ -1,9 +1,16 @@
 package desktop.client;
 
 import java.io.File;
+import java.io.PrintWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -15,7 +22,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import axmlDoc.AxmlDoc;
+import axmlDoc.AxmlDoc.ReturnType;
 import axmlDoc.AxmlNode;
+import axmlDoc.AxmlDoc.HandleStrategy;
 
 public class ReadXMLFile {
 
@@ -24,10 +33,7 @@ public class ReadXMLFile {
 		try {
 
 			File fXmlFile = new File("livro.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
-			AxmlDoc axmlDoc = new AxmlDoc(doc);
+			AxmlDoc axmlDoc = new AxmlDoc(fXmlFile, HandleStrategy.LAZY, ReturnType.STRING);
 
 			axmlDoc.getDocumentElement().normalize();
 
@@ -69,21 +75,24 @@ public class ReadXMLFile {
 				// System.out.println(xPath.compile(pathExpression).evaluate(doc));
 
 				// Usuário escolhe o capítulo 1 para leitura:
-				pathExpression = xPath.compile("/livro/capitulo[1]");
-				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
-				AxmlNode axmlNode = new AxmlNode((Element) node);
-				System.out.println("");
-				System.out.println("---> Usuário escolhe o capítulo 1 para leitura:");
-				System.out.println(axmlNode.getTextContent());
-				System.out.println("");
+//				pathExpression = xPath.compile("/livro/capitulo[1]");
+//				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
+//				AxmlNode axmlNode = new AxmlNode((Element) node);
+//				System.out.println("");
+//				System.out.println("---> Usuário escolhe o capítulo 1 para leitura:");
+//				System.out.println(axmlNode.getTextContent());
+//				System.out.println("");
+				
+				System.out.println(axmlDoc.getTextFromSingleNode("/livro/capitulo[1]"));
 
-				// Usuário escolhe o capítulo 2 para leitura:
-				pathExpression = xPath.compile("/livro/capitulo[2]");
-				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
-				axmlNode = new AxmlNode(node);
-				System.out.println("");
-				System.out.println("---> Usuário escolhe o capítulo 2 para leitura:");
-				System.out.println(axmlNode.getTextContent());
+//				// Usuário escolhe o capítulo 2 para leitura:
+//				pathExpression = xPath.compile("/livro/capitulo[2]");
+//				node = (Node) pathExpression.evaluate(axmlDoc, XPathConstants.NODE);
+//				axmlNode = new AxmlNode(node);
+//				System.out.println("");
+//				System.out.println("---> Usuário escolhe o capítulo 2 para leitura:");
+//				System.out.println(axmlNode.getTextContent());
+				System.out.println(axmlDoc.getTextFromSingleNode("/livro/capitulo[2]"));
 				// if (remoteCallList != null && remoteCallList.getLength() ==
 				// 0) {
 				// System.out.println(node.getTextContent());
@@ -100,7 +109,25 @@ public class ReadXMLFile {
 				// }
 				//
 				// }
+			    TransformerFactory tFactory =
+					    TransformerFactory.newInstance();
+					    Transformer transformer = null;
+						try {
+							transformer = tFactory.newTransformer();
+						} catch (TransformerConfigurationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				
 				System.out.println("");
+			    DOMSource source = new DOMSource(axmlDoc);
+			    StreamResult result = new StreamResult(System.out);
+			    try {
+					transformer.transform(source, result);
+				} catch (TransformerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
