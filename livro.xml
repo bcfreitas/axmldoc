@@ -1,15 +1,6 @@
-<?xml version="1.0"?>
-<livro titulo="Introducao XML" autor="Joao de Deus">
-	<capitulo numero="1" titulo="Estrutura de um arquivo XML">
-		Texto do capitulo 1 --- Texto do
-		capitulo 1 --- Texto do capitulo 1 --- Texto do capitulo 1 --- Texto
-		do capitulo 1 --- Texto do capitulo 1 --- Texto do capitulo 1 ---
-		Texto do capitulo 1
-	</capitulo>
-	<capitulo numero="2" titulo="Usos práticos para XML">
-		<axml:call
-			service="http://localhost:8080/axis2/services/StockQuoteService/getPrice?symbol=Lenovo">
-			teste
-		</axml:call>
-	</capitulo>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><livro autor="Joao de Deus" titulo="Introducao XML">
+	<capitulo numero="1" titulo="Estrutura de um arquivo XML"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=1"/></capitulo>
+	<capitulo numero="2" titulo="Usos práticos para XML"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=2"/></capitulo>
+
+	<capitulo numero="3" titulo="XML e Webservices"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=3"/></capitulo>
 </livro>

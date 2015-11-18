@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -31,12 +32,13 @@ import axmlDoc.AxmlDoc.ReturnType;
 
 public abstract class AbstractAxmlDoc implements Document {
 	protected Document decoratedDocument;
-	private String xmlFilePath;
-	private HandleStrategy handleStrategy;
+	protected String xmlFilePath;
+	protected HandleStrategy handleStrategy;
 	private DocumentBuilderFactory dbFactory;
 	private DocumentBuilder dBuilder;
 	protected ReturnType returnType;
 	protected Node uniqueMaterializedElement;
+	protected TransformerFactory tFactory; 
 
 	public AbstractAxmlDoc(Document documentToDecorate) {
 		this.decoratedDocument = documentToDecorate;
