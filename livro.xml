@@ -2,5 +2,5 @@
 	<capitulo numero="1" titulo="Estrutura de um arquivo XML"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=1"/></capitulo>
 	<capitulo numero="2" titulo="Usos práticos para XML"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=2"/></capitulo>
 
-	<capitulo numero="3" titulo="XML e Webservices"><axml:call service="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=3"/></capitulo>
+	<capitulo dataFrom="http://localhost:8080/axis2/services/AxmlDocLibrary/conteudoOnline?livro=bruno&amp;capitulo=3" numero="3" titulo="XML e Webservices">conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; conteudo do capitulo 3; ENDENDEND</capitulo>
 </livro>

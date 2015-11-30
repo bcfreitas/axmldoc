@@ -1,6 +1,9 @@
 package axmlDoc.samples;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import org.w3c.dom.Element;
@@ -13,22 +16,22 @@ import axmlDoc.AxmlDoc.ReturnType;
 
 public class AxmlDocDesktopClient {
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IOException {
 			System.out.println("AXMLDoc Lib demo ===================================");
 			callMainMenu();
 
 	}
 	
-	private static void callMainMenu(){
-		Scanner input;
+	private static void callMainMenu() throws IOException{
+		InputStreamReader inputStream = new InputStreamReader(System.in);
+		BufferedReader input = new BufferedReader (inputStream);
 		Boolean flagContinue = false;
 
 		while (!flagContinue) {
 			System.out.println("Main menu - choose an option: ");				
 			System.out.println("1 - Read a book");
 			System.out.println("2 - Reset materialized data (book file will be reset)");
-			input = new Scanner(System.in);
-			String choosenOption = input.nextLine();
+			String choosenOption = input.readLine();
 
 			switch (choosenOption) {
 			case "1":
@@ -54,11 +57,13 @@ public class AxmlDocDesktopClient {
 		
 	}
 
-	private static void readBook() {
+	private static void readBook() throws IOException {
 		HandleStrategy strategy = null;
 		File fXmlFile = new File("livro.xml");
 		Long originalSize = fXmlFile.length();
-
+		InputStreamReader inputStream = new InputStreamReader(System.in);
+		BufferedReader input = new BufferedReader (inputStream);
+		
 		while (strategy == null) {
 			System.out.println("Choose a strategy for data materialization: ");
 			System.out.println("1 - LAZY");
@@ -66,29 +71,23 @@ public class AxmlDocDesktopClient {
 			System.out.println("3 - LAZY_PERSIST_WITH_EXCLUSION");
 			System.out.println("4 - EAGER");
 			System.out.println("5 - EAGER_PERSIST");
-			Scanner input = new Scanner(System.in);
-			String choosenStrategy = input.nextLine();
+			String choosenStrategy = input.readLine();
 
 			switch (choosenStrategy) {
 			case "1":
 				strategy = HandleStrategy.LAZY;
-				input.close();
 				break;
 			case "2":
 				strategy = HandleStrategy.LAZY_PERSIST;
-				input.close();
 				break;
 			case "3":
 				strategy = HandleStrategy.LAZY_PERSIST_WITH_EXCLUSION;
-				input.close();
 				break;
 			case "4":
 				strategy = HandleStrategy.EAGER;
-				input.close();
 				break;
 			case "5":
 				strategy = HandleStrategy.EAGER_PERSIST;
-				input.close();
 				break;
 			default:
 				System.out.println("Invalid option.");
@@ -132,8 +131,7 @@ public class AxmlDocDesktopClient {
 					}
 				}
 
-				Scanner input = new Scanner(System.in);
-				String choosenChapter = input.nextLine();
+				String choosenChapter = input.readLine();
 
 				switch (choosenChapter) {
 				case "1":
@@ -143,7 +141,6 @@ public class AxmlDocDesktopClient {
 					System.out.println("Actual book file size: " + fXmlFile.length() + "B. Was "
 							+ originalSize + "B.");
 					System.out.println("ps.: See the original XML file to check strategy effects.");
-					input.close();
 					break;
 				case "2":
 					System.out.println("Chapter 2 contents:");
@@ -152,7 +149,6 @@ public class AxmlDocDesktopClient {
 					System.out.println("Actual book file size: " + fXmlFile.length() + "B. Was "
 							+ originalSize + "B.");
 					System.out.println("ps.: See the original XML file to check strategy effects.");
-					input.close();
 					break;
 				case "3":
 					System.out.println("Chapter 3 contents:");
@@ -161,7 +157,6 @@ public class AxmlDocDesktopClient {
 					System.out.println("Actual book file size: " + fXmlFile.length() + "B. Was "
 							+ originalSize + "B.");
 					System.out.println("ps.: See the original XML file to check strategy effects.");
-					input.close();
 					break;
 				case "0":
 					flagExit = true;
